@@ -81,7 +81,7 @@ class DetailArmadaPage extends GetView<DetailArmadaController> {
                                   ),
                                   child: Center(
                                     child: Image.network(
-                                      "https://s.kaskus.id/r540x540/images/2019/04/21/7556108_20190421034826.png",
+                                      "${controller.setDetailArmada()['image_armada']}",
                                       width: screenWidth * 0.7,
                                       fit: BoxFit.cover,
                                     ),

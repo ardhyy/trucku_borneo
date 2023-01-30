@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:trucku_borneo/database/model/jenis_truk.dart';
 import 'package:trucku_borneo/database/services/network_handle.dart';
@@ -66,7 +68,12 @@ class HomeController extends GetxController {
         var result = response.body;
         final truckresponse = jenistruckFromJson(result);
         for (var i = 0; i < truckresponse.data.length; i++) {
-          dataListArmada.add(truckresponse.data[i].toJson());
+          var randomImage = getRandomImageArmada();
+          var dataArmada = truckresponse.data[i].toJson();
+          dataArmada["image_armada"] =
+              linkImage + "/jenis_armada/" + randomImage;
+          dataListArmada.add(dataArmada);
+          // dataListArmada.add(truckresponse.data[i].toJson());
         }
       } else {
         customSnackBar('Error', 'Gagal Mendapatkan Data', 'error');
@@ -74,5 +81,16 @@ class HomeController extends GetxController {
     } catch (e) {
       customSnackBar('Error', '$e', 'error');
     }
+  }
+
+  String getRandomImageArmada() {
+    List<String> imageList = [
+      "borneo1.png",
+      "borneo2.png",
+      "borneo3.png",
+      "borneo4.png"
+    ];
+    var randomIndex = Random().nextInt(imageList.length);
+    return imageList[randomIndex];
   }
 }

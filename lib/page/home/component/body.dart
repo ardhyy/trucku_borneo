@@ -98,8 +98,8 @@ class BodyHome extends StatelessWidget {
                                     size: size,
                                     cardID: controller.dataListArmada[index]
                                         ['id'],
-                                    cardImage:
-                                        "https://s.kaskus.id/r540x540/images/2019/04/21/7556108_20190421034826.png",
+                                    cardImage: controller.dataListArmada[index]
+                                        ['image_armada'],
                                     cardTitle: controller.dataListArmada[index]
                                         ['jenis_truk'],
                                     cardButton: AppRoutes.detailArmada,
