@@ -63,7 +63,6 @@ class SearchAddressController extends GetxController {
             "Permission denied - please ask the user to enable it from the app settings",
             "error");
       }
-      print("error" + e.toString());
     }
   }
 

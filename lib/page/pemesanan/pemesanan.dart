@@ -141,16 +141,18 @@ class _PemesananState extends State<PemesananPage> {
                                             fontSize: 15,
                                           ),
                                         ),
-                                        onTap: () async {
-                                          final dynamic result =
-                                              await Get.toNamed(
-                                                  Routes.searchAddress);
-                                          if (result != null) {
-                                            _pemesananController
-                                                .alamatAsalController
-                                                .text = result.toString();
-                                          }
-                                        },
+                                        // onTap: () async {
+                                        //   final dynamic result =
+                                        //       await Get.toNamed(
+                                        //           Routes.searchAddress);
+                                        //   if (result != null) {
+                                        //     _pemesananController
+                                        //         .alamatAsalController
+                                        //         .text = result.toString();
+                                        //   }
+                                        // },
+                                        onTap: _pemesananController
+                                            .handleAddressAsal,
                                       ),
                                     ),
                                   ),
@@ -240,8 +242,8 @@ class _PemesananState extends State<PemesananPage> {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: TextField(
-                                        // controller: _pemesananController
-                                        //     .alamatTujuanController,
+                                        controller: _pemesananController
+                                            .alamatTujuanController,
                                         decoration: InputDecoration(
                                           border: InputBorder.none,
                                           prefixIcon: const Icon(

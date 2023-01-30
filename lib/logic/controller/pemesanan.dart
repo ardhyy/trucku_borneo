@@ -17,6 +17,9 @@ class PemesananController extends GetxController
       tglPengembalianController;
 
   final lamaSewa = 0.obs;
+  double latAsal = 0.0;
+  double lngAsal = 0.0;
+  String alamatAsal = "".obs.toString();
 
   @override
   void onInit() {
@@ -38,6 +41,21 @@ class PemesananController extends GetxController
     tglPengambilanController.dispose();
     tglPengembalianController.dispose();
     super.onClose();
+  }
+
+  void handleAddressAsal() async {
+    final dynamic result = await Get.toNamed(Routes.searchAddress);
+    latAsal = result[0];
+    lngAsal = result[1];
+    alamatAsal = result[2];
+    if (alamatAsal != "" && alamatAsal.isNotEmpty) {
+      alamatAsalController.value = TextEditingValue(text: alamatAsal);
+      update();
+    }
+    print("langtitude asal: ${lngAsal}");
+    print("latitude asal: ${latAsal}");
+    print(alamatAsal);
+    // print(result);
   }
 
   void hitungLamaSewa() {
