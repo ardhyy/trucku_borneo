@@ -141,16 +141,6 @@ class _PemesananState extends State<PemesananPage> {
                                             fontSize: 15,
                                           ),
                                         ),
-                                        // onTap: () async {
-                                        //   final dynamic result =
-                                        //       await Get.toNamed(
-                                        //           Routes.searchAddress);
-                                        //   if (result != null) {
-                                        //     _pemesananController
-                                        //         .alamatAsalController
-                                        //         .text = result.toString();
-                                        //   }
-                                        // },
                                         onTap: _pemesananController
                                             .handleAddressAsal,
                                       ),
@@ -256,6 +246,8 @@ class _PemesananState extends State<PemesananPage> {
                                             fontSize: 15,
                                           ),
                                         ),
+                                        onTap: _pemesananController
+                                            .handleAddressTujuan,
                                       ),
                                     ),
                                   ),
@@ -424,48 +416,24 @@ class _PemesananState extends State<PemesananPage> {
                                             MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Text(
-                                            'Alamat Asal',
+                                            'Alamat Asal :',
                                             style: GoogleFonts.poppins(
                                               color: KPColor1,
                                               fontSize: 14,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
-                                          Text(
-                                            'Pondok Indah',
-                                            style: GoogleFonts.poppins(
-                                              color: KPColor1,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        top: KdefaultPadding,
-                                        left: KdefaultPadding,
-                                        right: KdefaultPadding,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Text(
-                                            'Alamat Tujuan',
-                                            style: GoogleFonts.poppins(
-                                              color: KPColor1,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                          Text(
-                                            'Pondok Indah',
-                                            style: GoogleFonts.poppins(
-                                              color: KPColor1,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
+                                          SizedBox(
+                                            width: screenWidth / 2.2,
+                                            child: Text(
+                                              '${_pemesananController.alamatAsalController.text}',
+                                              style: GoogleFonts.poppins(
+                                                color: KPColor1,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
                                             ),
                                           ),
                                         ],
@@ -482,7 +450,41 @@ class _PemesananState extends State<PemesananPage> {
                                             MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Text(
-                                            'Jenis Truck',
+                                            'Alamat Tujuan :',
+                                            style: GoogleFonts.poppins(
+                                              color: KPColor1,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: screenWidth / 2.2,
+                                            child: Text(
+                                              '${_pemesananController.alamatTujuanController.text}',
+                                              style: GoogleFonts.poppins(
+                                                color: KPColor1,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: KdefaultPadding,
+                                        left: KdefaultPadding,
+                                        right: KdefaultPadding,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Text(
+                                            'Jenis Truck :',
                                             style: GoogleFonts.poppins(
                                               color: KPColor1,
                                               fontSize: 14,
@@ -493,8 +495,8 @@ class _PemesananState extends State<PemesananPage> {
                                             'JBORNEO_01',
                                             style: GoogleFonts.poppins(
                                               color: KPColor1,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
                                             ),
                                           ),
                                         ],
@@ -511,7 +513,7 @@ class _PemesananState extends State<PemesananPage> {
                                             MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Text(
-                                            'Total Biaya',
+                                            'Total Biaya :',
                                             style: GoogleFonts.poppins(
                                               color: KPColor1,
                                               fontSize: 14,
@@ -519,11 +521,11 @@ class _PemesananState extends State<PemesananPage> {
                                             ),
                                           ),
                                           Text(
-                                            'Rp. 1.000.000',
+                                            'Rp. {controller.totalBiaya}',
                                             style: GoogleFonts.poppins(
                                               color: KPColor1,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
                                             ),
                                           ),
                                         ],
@@ -557,20 +559,6 @@ class _PemesananState extends State<PemesananPage> {
                                             ),
                                           ),
                                           onPressed: () {
-                                            // Get.to(
-                                            //   () => print("OK"),
-                                            //   transition:
-                                            //       Transition.rightToLeft,
-                                            //   duration: const Duration(
-                                            //       milliseconds: 500),
-                                            //   curve: Curves.easeInOut,
-                                            //   arguments: [
-                                            //     'Pondok Indah',
-                                            //     'Pondok Indah',
-                                            //     'JBORNEO_01',
-                                            //     'Rp. 1.000.000',
-                                            //   ],
-                                            // );
                                             _pemesananController
                                                 .confirmPemesanan();
                                           },

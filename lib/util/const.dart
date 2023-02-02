@@ -13,4 +13,4 @@ const color1 = Color.fromRGBO(247, 184, 75, 1);
 
 const double KdefaultPadding = 20.0;
 
-const googleApiKey = "AIzaSyDGH1WTYbjosUyOI7zZ72OfU-nomPeZ9xw";
+const googleApiKey = "AIzaSyAKCuatS3cOF2g_yN6Md1GV3bUkKMAGoG8";

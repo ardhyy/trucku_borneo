@@ -6,6 +6,7 @@ import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:trucku_borneo/util/widget/custom_snackbar.dart';
 
 import '../../page/search_address/search_address.dart';
@@ -18,7 +19,13 @@ class SearchAddressController extends GetxController {
   RxDouble lat = 0.0.obs;
   RxDouble lng = 0.0.obs;
   String address = "".obs.toString();
-  RxList<Marker> markersL = <Marker>[].obs;
+  List<Marker> markersL = <Marker>[];
+  Set<Marker> get markers => markersL.toSet();
+
+  Marker initialMarker = Marker(
+      markerId: MarkerId("1"),
+      position: LatLng(0.0, 0.0),
+      infoWindow: InfoWindow(title: "Lokasi Anda"));
 
   void onMapCreated(GoogleMapController controller) {
     mpController = controller;
@@ -28,8 +35,9 @@ class SearchAddressController extends GetxController {
   void onReady() {
     isLoading(true);
     super.onReady();
-    getCurrentLocation();
-    update();
+    // getCurrentLocation();
+    checkLocationPermission();
+    // update();
     isLoading(false);
   }
 
@@ -40,29 +48,37 @@ class SearchAddressController extends GetxController {
     markersL.clear();
   }
 
+  checkLocationPermission() async {
+    if (await Permission.location.isGranted) {
+      getCurrentLocation();
+    } else {
+      if (await Permission.location.isDenied) {
+        await Permission.location.request();
+        if (await Permission.location.isGranted) {
+          getCurrentLocation();
+        } else {
+          customSnackBar("Error", "Permission denied", "error");
+        }
+      }
+    }
+  }
+
   void getCurrentLocation() async {
     try {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
-
       lat.value = position.latitude;
       lng.value = position.longitude;
 
-      mpController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-          target: LatLng(position.latitude, position.longitude), zoom: 17)));
+      mpController.animateCamera(CameraUpdate.newCameraPosition(
+          CameraPosition(target: LatLng(lat.value, lng.value), zoom: 17)));
       markersL.add(Marker(
           markerId: MarkerId("1"),
           position: LatLng(lat.value, lng.value),
           infoWindow: InfoWindow(title: "Posisi Anda")));
+      update();
     } catch (e) {
-      if (e.toString() == 'PERMISSION_DENIED') {
-        customSnackBar("Error", "Permission denied", "error");
-      } else if (e.toString() == 'PERMISSION_DENIED_NEVER_ASK') {
-        customSnackBar(
-            "Error",
-            "Permission denied - please ask the user to enable it from the app settings",
-            "error");
-      }
+      customSnackBar("Error", e.toString(), "error");
     }
   }
 

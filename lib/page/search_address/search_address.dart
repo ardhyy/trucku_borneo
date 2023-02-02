@@ -17,6 +17,17 @@ class searchAddressPage extends StatefulWidget {
 final homeScaffoldKey = GlobalKey<ScaffoldState>();
 final loc_controller = Get.put(SearchAddressController());
 
+//create a cordination before
+LatLng _initialcameraposition = LatLng(3.1390, 101.6869);
+
+// create a marker for the location
+// Marker _initialMarker = Marker(
+//   markerId: MarkerId("1"),
+//   position: _initialcameraposition,
+//   infoWindow: InfoWindow(title: "Initial Position"),
+//   icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+// );
+
 class _searchAddress extends State<searchAddressPage> {
   @override
   Widget build(BuildContext context) {
@@ -31,6 +42,7 @@ class _searchAddress extends State<searchAddressPage> {
             GoogleMap(
               initialCameraPosition: CameraPosition(
                 target: LatLng(controller.lat.value, controller.lng.value),
+                // target: _initialcameraposition,
                 zoom: 15,
               ),
               markers: controller.markersL.toSet(),
@@ -74,10 +86,6 @@ class _searchAddress extends State<searchAddressPage> {
                 ),
               ),
             ),
-            if (controller.isLoading.value)
-              const Center(
-                child: Loader(),
-              ),
           ],
         ),
       ),

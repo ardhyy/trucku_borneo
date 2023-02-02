@@ -1,7 +1,7 @@
 class ApiEndPoint {
   static const String appName = "TrucKu Borneo";
-  // static const String apiUrl = "https://trucku-borneo.rzy.my.id";
-  static const String apiUrl = "http://192.168.1.23:8000";
+  static const String apiUrl = "https://trucku-borneo.rzy.my.id";
+  // static const String apiUrl = "http://192.168.1.23:8000";
   static const String appVersion = "1.0.0";
   static const String token = "rzyToken-auth";
   static const String loginApi = "/api/login";
