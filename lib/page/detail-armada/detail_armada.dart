@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:trucku_borneo/page/pemesanan/pemesanan.dart';
+import 'package:trucku_borneo/routes/routes.dart';
 import 'package:trucku_borneo/util/widget/custom_snackbar.dart';
 
 import '../../logic/controller/detail_armada.dart';
@@ -168,7 +169,7 @@ class DetailArmadaPage extends GetView<DetailArmadaController> {
                         onTap: () {
                           if (dataPerusahaan == null) {
                             customSnackBar(
-                              'Warning',
+                              'Pemberitahuan',
                               'Lengkapi Data Profile Anda Terlebih Dahulu',
                               'warning',
                             );
@@ -176,14 +177,10 @@ class DetailArmadaPage extends GetView<DetailArmadaController> {
                             Get.to(() => PemesananPage(), arguments: {
                               'jenis_truk':
                                   controller.setDetailArmada()['jenis_truk'],
-                              'dimensi':
-                                  controller.setDetailArmada()['dimensi'],
-                              'volume': controller.setDetailArmada()['volume'],
-                              'beban_maks':
-                                  controller.setDetailArmada()['beban_maks'],
-                              'harga': controller.setDetailArmada()['harga'],
+                              'biaya': controller.setDetailArmada()['biaya'],
                             });
                           }
+                          // Get.toNamed(AppRoutes.pembayaran);
                         },
                         child: Text(
                           'Pesan Sekarang',

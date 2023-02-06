@@ -3,6 +3,7 @@ import 'package:trucku_borneo/logic/bindings/dashboard.dart';
 import 'package:trucku_borneo/logic/bindings/edit_profile.dart';
 import 'package:trucku_borneo/logic/bindings/home.dart';
 import 'package:trucku_borneo/logic/bindings/login.dart';
+import 'package:trucku_borneo/logic/bindings/pembayaran.dart';
 import 'package:trucku_borneo/logic/bindings/pemesanan.dart';
 import 'package:trucku_borneo/logic/bindings/profile.dart';
 import 'package:trucku_borneo/logic/bindings/register.dart';
@@ -13,6 +14,7 @@ import 'package:trucku_borneo/page/edit_profile/edit_profile.dart';
 import 'package:trucku_borneo/page/history_order/history_order.dart';
 import 'package:trucku_borneo/page/home/home.dart';
 import 'package:trucku_borneo/page/login/login.dart';
+import 'package:trucku_borneo/page/pembayaran/pembayaran.dart';
 import 'package:trucku_borneo/page/pemesanan/pemesanan.dart';
 import 'package:trucku_borneo/page/profile/profile.dart';
 import 'package:trucku_borneo/page/register/register.dart';
@@ -31,6 +33,7 @@ class AppRoutes {
   static const detailArmada = Routes.detailArmada;
   static const pesanArmada = Routes.pesanArmada;
   static const searchAddress = Routes.searchAddress;
+  static const pembayaran = Routes.pembayaran;
 
   static final routes = [
     GetPage(
@@ -90,6 +93,11 @@ class AppRoutes {
       page: () => searchAddressPage(),
       binding: SearchAddresBinding(),
     ),
+    GetPage(
+      name: Routes.pembayaran,
+      page: () => PembayaranPage(),
+      binding: PembayaranBinding(),
+    ),
   ];
 }
 
@@ -105,4 +113,5 @@ class Routes {
   static const detailArmada = '/detail-armada';
   static const pesanArmada = '/pesan-armada';
   static const searchAddress = '/pemesanan/search-address';
+  static const pembayaran = '/pembayaran';
 }

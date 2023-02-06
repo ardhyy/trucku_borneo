@@ -28,7 +28,8 @@ class PemesananController extends GetxController
 
   double distance = 0.0;
 
-  int formatTotalHargaSewa = 0;
+  int biayaSewa = 0;
+  String jenisArmada = "".obs.toString();
 
   @override
   void onInit() {
@@ -39,6 +40,7 @@ class PemesananController extends GetxController
     jumlahMuatanController = TextEditingController();
     tglPengambilanController = TextEditingController();
     tglPengembalianController = TextEditingController();
+    setDetailArmada();
   }
 
   @override
@@ -52,11 +54,20 @@ class PemesananController extends GetxController
     super.onClose();
   }
 
+  Map<String, dynamic> setDetailArmada() {
+    if (Get.arguments != null) {
+      final data = Get.arguments as Map<String, dynamic>;
+      jenisArmada = data['jenis_truk'];
+      biayaSewa = data['biaya'];
+      return data;
+    } else {
+      return {};
+    }
+  }
+
   void handleAddressAsal() async {
     try {
       final dynamic result = await Get.toNamed(Routes.searchAddress);
-      // final dynamic result = await Get.toNamed(Routes.searchAddress,
-      //     arguments: [latAsal, lngAsal, alamatAsal]);
       if (result != null) {
         latAsal = result[0];
         lngAsal = result[1];
@@ -66,9 +77,6 @@ class PemesananController extends GetxController
           update();
         }
       }
-      print('lat asal: $latAsal');
-      print('lng asal: $lngAsal');
-      print('alamat asal: $alamatAsal');
     } catch (error) {
       print("Error: $error");
     }
@@ -115,7 +123,6 @@ class PemesananController extends GetxController
           DateFormat('dd-MM-yyyy').parse(tglPengembalianController.text);
       var selisih = tglKembali.difference(tglAmbil);
       lamaSewa.value = selisih.inDays;
-      print('lama sewa: ${lamaSewa.value} hari');
       return;
     } else {
       customSnackBar('Error',
@@ -123,64 +130,334 @@ class PemesananController extends GetxController
     }
   }
 
-  void hitungTotalHargaSewa() {
-    hitungJarak();
-    hitungLamaSewa();
-    var totalHargaSewa = ((lamaSewa.value * 100000) + (distance * 10000));
-    // format total harga sewa
-    formatTotalHargaSewa =
-        NumberFormat.currency(locale: 'id', symbol: 'Rp. ', decimalDigits: 0)
-            .format(totalHargaSewa) as int;
-    print('total harga sewa: $formatTotalHargaSewa');
+  void showKonfirmasiPemesanan(double screenHeight, double screenWidth) {
+    if (alamatAsalController.text.isNotEmpty &&
+        alamatTujuanController.text.isNotEmpty) {
+      if (jumlahMuatanController.text.isNotEmpty) {
+        if (tglPengambilanController.text.isNotEmpty &&
+            tglPengembalianController.text.isNotEmpty) {
+          Get.bottomSheet(
+            Container(
+              height: screenHeight * 2,
+              width: screenWidth,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: KdefaultPadding,
+                      left: KdefaultPadding,
+                      right: KdefaultPadding,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          'Konfirmasi Pemesanan',
+                          style: GoogleFonts.poppins(
+                            color: KPColor1,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Get.back();
+                          },
+                          child: const Icon(
+                            Icons.close,
+                            color: KPColor1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(
+                      top: KdefaultPadding / 2,
+                      left: KdefaultPadding,
+                      right: KdefaultPadding,
+                    ),
+                    child: Divider(
+                      color: KPColor1,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: KdefaultPadding,
+                      left: KdefaultPadding,
+                      right: KdefaultPadding,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          'Alamat Asal :',
+                          style: GoogleFonts.poppins(
+                            color: KPColor1,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(
+                          width: screenWidth / 2.2,
+                          child: Text(
+                            alamatAsalController.text,
+                            style: GoogleFonts.poppins(
+                              color: KPColor1,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: KdefaultPadding,
+                      left: KdefaultPadding,
+                      right: KdefaultPadding,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          'Alamat Tujuan :',
+                          style: GoogleFonts.poppins(
+                            color: KPColor1,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(
+                          width: screenWidth / 2.2,
+                          child: Text(
+                            alamatTujuanController.text,
+                            style: GoogleFonts.poppins(
+                              color: KPColor1,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: KdefaultPadding,
+                      left: KdefaultPadding,
+                      right: KdefaultPadding,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          'Jenis Truck :',
+                          style: GoogleFonts.poppins(
+                            color: KPColor1,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          jenisArmada,
+                          style: GoogleFonts.poppins(
+                            color: KPColor1,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: KdefaultPadding,
+                      left: KdefaultPadding,
+                      right: KdefaultPadding,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          'Total Biaya :',
+                          style: GoogleFonts.poppins(
+                            color: KPColor1,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          NumberFormat.currency(
+                            locale: 'id',
+                            symbol: 'Rp. ',
+                            decimalDigits: 0,
+                          ).format(
+                            // totalHarga,
+                            hitungTotalHargaSewa(),
+                          ),
+                          style: GoogleFonts.poppins(
+                            color: KPColor1,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(
+                      top: KdefaultPadding / 2,
+                      left: KdefaultPadding,
+                      right: KdefaultPadding,
+                    ),
+                    child: Divider(
+                      color: KPColor1,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: KdefaultPadding / 2,
+                      left: KdefaultPadding,
+                      right: KdefaultPadding,
+                    ),
+                    child: SizedBox(
+                      width: screenWidth * 0.9,
+                      height: screenHeight * 0.07,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: KPColor1,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: () {
+                          confirmPemesanan();
+                        },
+                        child: Text(
+                          'Pesan',
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+      }
+    } else {
+      customSnackBar('Error', 'Mohon isi semua data terlebih dahulu', 'error');
+    }
+  }
+
+  int hitungTotalHargaSewa() {
+    var jumlah_muatan = int.parse(jumlahMuatanController.text);
+    var totalHargaSewa = ((jumlah_muatan * biayaSewa) + (distance * biayaSewa));
+    var totalHarga = totalHargaSewa.toInt();
+    print('total harga sewa: $totalHarga');
+    return totalHarga;
   }
 
   void confirmPemesanan() {
-    hitungTotalHargaSewa();
-    // if (alamatAsalController.text.isNotEmpty &&
-    //     alamatTujuanController.text.isNotEmpty) {
-    //   if (jumlahMuatanController.text.isNotEmpty) {
-    //     if (tglPengambilanController.text.isNotEmpty &&
-    //         tglPengembalianController.text.isNotEmpty) {
-    //       Get.defaultDialog(
-    //         title: "Lanjut Pembayaran",
-    //         content: Padding(
-    //           padding: const EdgeInsets.only(
-    //               left: KdefaultPadding, right: KdefaultPadding),
-    //           child: Column(
-    //             children: [
-    //               Text(
-    //                   "Apakah anda yakin ingin melakukan pemesanan dan melanjutkan ke pembayaran?",
-    //                   style: GoogleFonts.poppins(
-    //                     fontSize: 14,
-    //                     fontWeight: FontWeight.w400,
-    //                   )),
-    //             ],
-    //           ),
-    //         ),
-    //         actions: [
-    //           TextButton(
-    //             onPressed: () {
-    //               Get.offAllNamed(AppRoutes.dashboard);
-    //             },
-    //             child: Text("Batal",
-    //                 style: GoogleFonts.poppins(
-    //                     fontSize: 14, color: KtextColorLight)),
-    //           ),
-    //           TextButton(
-    //             onPressed: () {
-    //               Get.back();
-    //             },
-    //             child: Text("Konfirmasi",
-    //                 style: GoogleFonts.poppins(
-    //                     fontSize: 14, color: KtextColorLight)),
-    //           ),
-    //         ],
-    //       );
-    //       hitungTotalHargaSewa();
-    //     }
-    //   }
-    // } else {
-    //   customSnackBar('Error', 'Lengkapi Data Form Pemesanan', 'error');
-    // }
+    Get.defaultDialog(
+      title: "Lanjut Pembayaran",
+      content: Padding(
+        padding: const EdgeInsets.only(
+            left: KdefaultPadding, right: KdefaultPadding),
+        child: Column(
+          children: [
+            Text(
+                "Apakah anda yakin ingin melakukan pemesanan dan melanjutkan ke pembayaran?",
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                )),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.offAllNamed(AppRoutes.dashboard);
+          },
+          child: Text("Batal",
+              style: GoogleFonts.poppins(fontSize: 14, color: KtextColorLight)),
+        ),
+        TextButton(
+          onPressed: () {
+            Get.toNamed(AppRoutes.pembayaran,
+                arguments: hitungTotalHargaSewa());
+          },
+          child: Text("Konfirmasi",
+              style: GoogleFonts.poppins(fontSize: 14, color: KtextColorLight)),
+        ),
+      ],
+    );
+  }
+
+  void cancelPemesanan() {
+    if (alamatAsalController.text.isNotEmpty &&
+        alamatTujuanController.text.isNotEmpty) {
+      if (jumlahMuatanController.text.isNotEmpty) {
+        if (tglPengambilanController.text.isNotEmpty &&
+            tglPengembalianController.text.isNotEmpty) {
+          Get.defaultDialog(
+            title: "Batalkan Pemesanan",
+            content: Padding(
+              padding: const EdgeInsets.only(
+                  left: KdefaultPadding, right: KdefaultPadding),
+              child: Column(
+                children: [
+                  Text("Apakah anda yakin ingin membatalkan pemesanan?",
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      )),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text("Tidak",
+                    style: GoogleFonts.poppins(
+                        fontSize: 14, color: KtextColorLight)),
+              ),
+              TextButton(
+                onPressed: () {
+                  Get.offAllNamed(AppRoutes.dashboard);
+                  dispose();
+                },
+                child: Text("Ya",
+                    style: GoogleFonts.poppins(
+                        fontSize: 14, color: KtextColorLight)),
+              ),
+            ],
+          );
+        }
+      }
+    } else {
+      Get.offAllNamed(AppRoutes.dashboard);
+    }
   }
 }

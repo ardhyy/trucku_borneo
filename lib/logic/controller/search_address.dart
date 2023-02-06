@@ -35,9 +35,7 @@ class SearchAddressController extends GetxController {
   void onReady() {
     isLoading(true);
     super.onReady();
-    // getCurrentLocation();
     checkLocationPermission();
-    // update();
     isLoading(false);
   }
 
@@ -124,17 +122,20 @@ class SearchAddressController extends GetxController {
       ),
     ));
 
-    markersL.clear();
-    markersL.add(
-      Marker(
-        markerId: MarkerId(p.placeId!),
-        position: LatLng(lat.value, lng.value),
-        infoWindow: InfoWindow(
-          title: detail.result.name,
-          snippet: p.description,
+    if (markersL.isNotEmpty) {
+      markersL.clear();
+      markersL.add(
+        Marker(
+          markerId: MarkerId(p.placeId!),
+          position: LatLng(lat.value, lng.value),
+          infoWindow: InfoWindow(
+            title: detail.result.name,
+            snippet: p.description,
+          ),
         ),
-      ),
-    );
+      );
+      update();
+    }
   }
 
   Future<void> handleButtonConfirm() async {

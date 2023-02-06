@@ -13,4 +13,7 @@ class ApiEndPoint {
   static const String editPasswordApi = "/api/change-password";
   static const String editPhotoApi = "/api/change-avatar";
   static const String armadaApi = "/api/armada";
+  static const String metodePembayaranApi = "/api/metode-pembayaran";
+  static const String transaksiApi = "/api/transaksi";
+  static const String uploadBuktiApi = "/api/upload-bukti";
 }
